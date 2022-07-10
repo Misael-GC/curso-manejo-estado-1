@@ -1,22 +1,42 @@
 import React from "react";
-//desde los componentes creado como funciones podemos recibir las props
 
 function UseState({name}){
     const [error, setError] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+
+    React.useEffect(()=>{
+        console.log('iniciando el efecto')
+
+        if(!!loading){
+            setTimeout(()=>{
+                console.log("Haciendo la validación")
+    
+                setLoading(false);
+    
+                console.log('terminando la validación');
+            }, 3000);
+        } 
+        console.log('Terminando el efecto')
+    },[loading]);
+    //necesitamos el [] para que el efecto se ejecute la 1ra vez, y envolvemos a loading para que se ejecute solo cuando haya cambios en el estado de loading
+
     return(
         <div>
             <h2>Eliminar {name}</h2>
             <p>Porfavor, write the segure code for know that wants delete</p>
 
-            {/* llamamos al estado con esta sintaxis */}
+
             {error &&(
                 <p>Error: el código es incorrecto</p>
             ) }
 
+            {loading &&(
+                <p>Cargando...</p>
+            ) }
+
             <input placeholder="código de seguridad"/>
             <button
-            //vamos actualizar al estado-> si error es false que pase a true
-            onClick={()=> setError(!error)}>
+            onClick={()=> setLoading(true)}>
             Affirm
             </button>
         </div>
