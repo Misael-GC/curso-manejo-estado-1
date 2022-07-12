@@ -22,9 +22,6 @@ function UseState({name}){
                 }else{
                     setError(true)
                     setLoading(false)
-                    setTimeout(()=>{
-                        setError(false)
-                    },5000)
                 }
     
                 console.log('terminando la validación');
@@ -56,7 +53,11 @@ function UseState({name}){
             })}
             />
             <button
-            onClick={()=> setLoading(true)}>
+            onClick={()=> 
+            {setLoading(true)
+            setError(false) //aporte 
+            }}
+            >
             Affirm
             </button>
         </div>
