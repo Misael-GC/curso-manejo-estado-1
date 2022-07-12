@@ -16,9 +16,9 @@ function UseState({name}){
             setTimeout(()=>{
                 console.log("Haciendo la validación")
 
-                if(value === SECURITY_CODE) {//comentario
+                if(value === SECURITY_CODE) {
                     setLoading(false);
-                    console.log('acceso permitido')
+                    // setError(false)
                 }else{
                     setError(true)
                     setLoading(false)
@@ -37,7 +37,7 @@ function UseState({name}){
             <p>Porfavor, write the segure code for know that wants delete</p>
 
 
-            {error &&(
+            {(error && !loading) &&(
                 <p>Error: el código es incorrecto</p>
             ) }
 
@@ -49,13 +49,14 @@ function UseState({name}){
             placeholder="código de seguridad"
             value={value}
             onChange={(event=>{
+            // setError(false) //no importa si ya fue false desde antes se lo vamos a reiterarar
             setValue(event.target.value)
             })}
             />
             <button
             onClick={()=> 
             {setLoading(true)
-            setError(false) //aporte 
+            // setError(false) //esta es la solución
             }}
             >
             Affirm
