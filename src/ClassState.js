@@ -1,9 +1,11 @@
 import React from "react";
 import { Loading } from "./Loading";
+const SECURITY_CODE = 'paradigma'; //comentario
 class ClassState extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      value: '',
       error: false,
       loading: false,//actualizar paso 1
     };
@@ -25,7 +27,11 @@ componentDidUpdate(){
         setTimeout(()=>{
             console.log("Haciendo la validación")
 
-            this.setState({ loading:false }); //sintaxis paso 3
+            if(SECURITY_CODE === this.state.value){
+              this.setState({ error: false, loading:false }); //error no aparezca
+            }else{
+              this.setState({error: true, loading:false}) //error aparezca
+            }
 
             console.log('terminando la validación');
         }, 3000);
@@ -38,10 +44,16 @@ componentDidUpdate(){
         <h2>Eliminar {this.props.name}</h2>
         <p>Porfavor, write the segure code for know that wants delete</p>
 
-        {this.state.error && <p>Error: el código es incorrecto</p>}
-        {this.state.loading && <Loading/>}
+        {(this.state.error && !this.state.loading) && ( <p>Error: el código es incorrecto</p>)}
+        {this.state.loading && (<Loading/>)}
 
-        <input placeholder="código de seguridad" />
+        <input 
+          placeholder="código de seguridad"
+          value={this.state.value}
+          onChange={(event)=> {
+            this.setState({value: event.target.value})
+          } }
+        />
         <button
           onClick={() => this.setState({ loading:true })} //actualización paso 2
         >
