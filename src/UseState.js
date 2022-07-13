@@ -7,6 +7,8 @@ function UseState({name}){
         value: '',
         error: false,
         loading: false,
+        deleted: false,
+        confirmed: false,
     });
 
     console.log(state); //actualizador 1
@@ -23,6 +25,7 @@ function UseState({name}){
                         ...state, //solución conexión al estado
                         error: false,
                         loading:false,
+                        confirmed:true,
                     })
                 }else{
                     setState({ //actualizador --------
@@ -39,42 +42,86 @@ function UseState({name}){
     },[state.loading]); //actualizador 4
     //necesitamos el [] para que el efecto se ejecute la 1ra vez, y envolvemos a loading para que se ejecute solo cuando haya cambios en el estado de loading
 
-    return(
-        <div>
-            <h2>Eliminar {name}</h2>
-            <p>Porfavor, write the segure code for know that wants delete</p>
-
-
-            {(state.error && !state.loading) &&( //actualizador 5
-                <p>Error: el código es incorrecto</p>
-            ) }
-
-            {state.loading &&( //actualizador 6
-                <p>Cargando...</p>
-            ) }
-
-            <input 
-            placeholder="código de seguridad"
-            value={state.value} //actualizador 7
-            onChange={(event)=>{
-                setState({ //actualizador --------
-                    ...state, //solución conexión al estado
-                        value:event.target.value,
-                    });
-            }}
-            />
+    if (!state.deleted && !state.confirmed){ //recuerda poner el estae.propiedad ya que así es la sintaxis
+        return (
+            <div>
+                <h2>Eliminar {name}</h2>
+                <p>Porfavor, write the segure code for know that wants delete</p>
+    
+    
+                {(state.error && !state.loading) &&( //actualizador 5
+                    <p>Error: el código es incorrecto</p>
+                ) }
+    
+                {state.loading &&( //actualizador 6
+                    <p>Cargando...</p>
+                ) }
+    
+                <input 
+                placeholder="código de seguridad"
+                value={state.value} //actualizador 7
+                onChange={(event)=>{
+                    setState({ //actualizador --------
+                        ...state, //solución conexión al estado
+                            value:event.target.value,
+                        });
+                }}
+                />
+                <button
+                onClick={()=> {
+                    setState({ //actualizador --------
+                        ...state, //solución conexión al estado
+                            loading:true,
+                        });
+                }}
+                >
+                Affirm
+                </button>
+            </div>
+        );
+    } else if (!!state.confirmed && !state.deleted){
+        return (
+        <React.Fragment>
+            <p>Confirmation State ¿Are u segure to delete?</p>
             <button
             onClick={()=> {
-                setState({ //actualizador --------
-                    ...state, //solución conexión al estado
-                        loading:true,
-                    });
+                setState({ 
+                    ...state,
+                    deleted: true,
+                 })
             }}
-            >
-            Affirm
+            >Yes, deleted
             </button>
-        </div>
-    );
+            <button
+            onClick={()=> {
+                setState({ 
+                    ...state,
+                    confirmed: false,
+                    value:'',
+                 })
+            }}
+            >No, I regretted
+            </button>
+        </React.Fragment>
+        );
+    }else{
+        return (
+            <React.Fragment>
+                <p>Borrado con éxito</p>
+                <button
+            onClick={()=> {
+                setState({ 
+                    ...state,
+                    confirmed: false,
+                    deleted: false,
+                    value:"",
+                 })
+            }}
+            >Resetear, volver atrás
+            </button>
+            </React.Fragment>
+            );
+    }
 }
 
 export { UseState };
