@@ -1,34 +1,42 @@
 import React from "react";
 
-const SECURITY_CODE = 'paradigma'; //comentario
+const SECURITY_CODE = 'paradigma'; 
 
 function UseState({name}){
-    const [value, setValue] = React.useState(''); //comentario
-    const [error, setError] = React.useState(false); //comentario
-    const [loading, setLoading] = React.useState(false);
+    const [state, setState]=React.useState({
+        value: '',
+        error: false,
+        loading: false,
+    });
 
-    console.log(value);
+    console.log(state); //actualizador 1
 
     React.useEffect(()=>{
         console.log('iniciando el efecto')
 
-        if(!!loading){
+        if(!!state.loading){ //actualizador 2
             setTimeout(()=>{
                 console.log("Haciendo la validación")
 
-                if(value === SECURITY_CODE) {
-                    setLoading(false);
-                    // setError(false)
+                if(state.value === SECURITY_CODE) { //actualizador 3
+                    setState({ //actualizador --------
+                        ...state, //solución conexión al estado
+                        error: false,
+                        loading:false,
+                    })
                 }else{
-                    setError(true)
-                    setLoading(false)
+                    setState({ //actualizador --------
+                        ...state, //solución conexión al estado
+                        error:true,
+                        loading:false,
+                    })
                 }
     
                 console.log('terminando la validación');
             }, 3000);
         } 
         console.log('Terminando el efecto')
-    },[loading]);
+    },[state.loading]); //actualizador 4
     //necesitamos el [] para que el efecto se ejecute la 1ra vez, y envolvemos a loading para que se ejecute solo cuando haya cambios en el estado de loading
 
     return(
@@ -37,26 +45,30 @@ function UseState({name}){
             <p>Porfavor, write the segure code for know that wants delete</p>
 
 
-            {(error && !loading) &&(
+            {(state.error && !state.loading) &&( //actualizador 5
                 <p>Error: el código es incorrecto</p>
             ) }
 
-            {loading &&(
+            {state.loading &&( //actualizador 6
                 <p>Cargando...</p>
             ) }
 
             <input 
             placeholder="código de seguridad"
-            value={value}
-            onChange={(event=>{
-            // setError(false) //no importa si ya fue false desde antes se lo vamos a reiterarar
-            setValue(event.target.value)
-            })}
+            value={state.value} //actualizador 7
+            onChange={(event)=>{
+                setState({ //actualizador --------
+                    ...state, //solución conexión al estado
+                        value:event.target.value,
+                    });
+            }}
             />
             <button
-            onClick={()=> 
-            {setLoading(true)
-            // setError(false) //esta es la solución
+            onClick={()=> {
+                setState({ //actualizador --------
+                    ...state, //solución conexión al estado
+                        loading:true,
+                    });
             }}
             >
             Affirm
