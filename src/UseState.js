@@ -11,7 +11,52 @@ function UseState({name}){
         confirmed: false,
     });
 
-    console.log(state); //actualizador 1
+    const onConfirm = () =>{
+        setState({ //actualizador --------
+            ...state, //solución conexión al estado
+            error: false,
+            loading:false,
+            confirmed:true,
+        });
+    }
+
+    const onError = () => {
+        setState({ //actualizador --------
+            ...state, //solución conexión al estado
+            error:true,
+            loading:false,
+        })
+    }
+
+    const onWrite = (newValue) =>{
+        setState({ 
+            ...state, 
+                value:newValue,
+            });
+    }
+
+    const onCheck = ()=>{
+        setState({ //actualizador --------
+            ...state, //solución conexión al estado
+                loading:true,
+            });
+    }
+
+    const onDelete = () => {
+        setState({ 
+            ...state,
+            deleted: true,
+         })
+    }
+
+    const onReset = () => {
+        setState({ 
+            ...state,
+            confirmed: false,
+            deleted: false,
+            value:'',
+         })
+    }
 
     React.useEffect(()=>{
         console.log('iniciando el efecto')
@@ -21,18 +66,9 @@ function UseState({name}){
                 console.log("Haciendo la validación")
 
                 if(state.value === SECURITY_CODE) { //actualizador 3
-                    setState({ //actualizador --------
-                        ...state, //solución conexión al estado
-                        error: false,
-                        loading:false,
-                        confirmed:true,
-                    })
+                    onConfirm();
                 }else{
-                    setState({ //actualizador --------
-                        ...state, //solución conexión al estado
-                        error:true,
-                        loading:false,
-                    })
+                    onError();
                 }
     
                 console.log('terminando la validación');
@@ -61,21 +97,15 @@ function UseState({name}){
                 placeholder="código de seguridad"
                 value={state.value} //actualizador 7
                 onChange={(event)=>{
-                    setState({ //actualizador --------
-                        ...state, //solución conexión al estado
-                            value:event.target.value,
-                        });
+                    onWrite(event.target.value)
                 }}
                 />
                 <button
                 onClick={()=> {
-                    setState({ //actualizador --------
-                        ...state, //solución conexión al estado
-                            loading:true,
-                        });
+                onCheck();
                 }}
                 >
-                Affirm
+                Check
                 </button>
             </div>
         );
@@ -85,20 +115,13 @@ function UseState({name}){
             <p>Confirmation State ¿Are u segure to delete?</p>
             <button
             onClick={()=> {
-                setState({ 
-                    ...state,
-                    deleted: true,
-                 })
+             onDelete();
             }}
             >Yes, deleted
             </button>
             <button
             onClick={()=> {
-                setState({ 
-                    ...state,
-                    confirmed: false,
-                    value:'',
-                 })
+                onReset();
             }}
             >No, I regretted
             </button>
@@ -110,12 +133,7 @@ function UseState({name}){
                 <p>Borrado con éxito</p>
                 <button
             onClick={()=> {
-                setState({ 
-                    ...state,
-                    confirmed: false,
-                    deleted: false,
-                    value:"",
-                 })
+                onReset();
             }}
             >Resetear, volver atrás
             </button>
