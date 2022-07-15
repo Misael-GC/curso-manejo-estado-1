@@ -3,6 +3,55 @@ import React from "react";
 const SECURITY_CODE = 'paradigma'; 
 
 
+const inicialState = {
+    value: '',
+    error: false,
+    loading: false,
+    deleted: false,
+    confirmed: false,
+}
+
+const reducerObject = (state, payload) => ({ //P3 Escoje tu reducer de if, switch o object
+    'CONFIRM':{
+        ...state,
+        error: false,
+        loading:false,
+        confirmed:true,
+    },
+    'ERROR': {
+        ...state,
+        error: true,
+        loading:false,
+    },
+    'WRITE':{
+        ...state,
+        value: payload,
+    },
+    'CHECK': {
+        ...state,
+        loading:true,
+    },
+    'DELETE':{ 
+        ...state,
+        deleted: true,
+     },
+     'RESET':{ 
+        ...state,
+        confirmed: false,
+        deleted: false,
+        value:'',
+     },
+});
+
+const reducer = (state, action) => {
+    if (reducerObject(state)[action.type]){
+        return reducerObject(state, action.payload)[action.type];
+    }else{
+        return state;
+    }
+}
+
+
 function UseReducer({name}){ //creamos el nombre P1
     const [state, dispatch]=React.useReducer(reducer, inicialState); //P2 - función que
 
@@ -95,54 +144,6 @@ function UseReducer({name}){ //creamos el nombre P1
     }
 }
 
-
-const inicialState = {
-    value: '',
-    error: false,
-    loading: false,
-    deleted: false,
-    confirmed: false,
-}
-
-const reducerObject = (state, payload) => ({ //P3 Escoje tu reducer de if, switch o object
-    'CONFIRM':{
-        ...state,
-        error: false,
-        loading:false,
-        confirmed:true,
-    },
-    'ERROR': {
-        ...state,
-        error: true,
-        loading:false,
-    },
-    'WRITE':{
-        ...state,
-        value: payload,
-    },
-    'CHECK': {
-        ...state,
-        loading:true,
-    },
-    'DELETE':{ 
-        ...state,
-        deleted: true,
-     },
-     'RESET':{ 
-        ...state,
-        confirmed: false,
-        deleted: false,
-        value:'',
-     },
-});
-
-const reducer = (state, action) => {
-    if (reducerObject(state)[action.type]){
-        return reducerObject(state, action.payload)[action.type];
-    }else{
-        return state;
-    }
-}
 
 
 export { UseReducer };
