@@ -11,31 +11,39 @@ const inicialState = {
     confirmed: false,
 }
 
+const actionTypes = {
+    confirm: 'CONFIRM',
+    error: 'ERROR',
+    delete: 'DELETE',
+    write:'WRITE',
+    reset: 'RESET',
+}
+
 const reducerObject = (state, payload) => ({ //P3 Escoje tu reducer de if, switch o object
-    'CONFIRM':{
+    [actionTypes.confirm]:{
         ...state,
         error: false,
         loading:false,
         confirmed:true,
     },
-    'ERROR': {
+    [actionTypes.error]: {
         ...state,
         error: true,
         loading:false,
     },
-    'WRITE':{
+    [actionTypes.write]:{
         ...state,
         value: payload,
     },
-    'CHECK': {
+    [actionTypes.check]: {
         ...state,
         loading:true,
     },
-    'DELETE':{ 
+    [actionTypes.delete]:{ 
         ...state,
         deleted: true,
      },
-     'RESET':{ 
+     [actionTypes.reset]:{ 
         ...state,
         confirmed: false,
         deleted: false,
@@ -64,9 +72,9 @@ function UseReducer({name}){ //creamos el nombre P1
                 console.log("Haciendo la validación")
 
                 if(state.value === SECURITY_CODE) { //actualizador 3
-                    dispatch({ type: 'CONFIRM' });
+                    dispatch({ type: actionTypes.confirm });
                 }else{
-                    dispatch({ type: 'ERROR' });
+                    dispatch({ type: actionTypes.error });
                 }
     
                 console.log('terminando la validación');
@@ -94,13 +102,13 @@ function UseReducer({name}){ //creamos el nombre P1
                 placeholder="código de seguridad"
                 value={state.value}
                 onChange={(event)=>{
-                    dispatch({ type: 'WRITE', payload:event.target.value })
+                    dispatch({ type: actionTypes.write, payload:event.target.value })
                     // onWrite(event.target.value)
                 }}
                 />
                 <button
                 onClick={()=> {
-                    dispatch({ type: 'CHECK' })
+                    dispatch({ type: actionTypes.check })
                 // onCheck();
                 }}
                 >
@@ -114,14 +122,14 @@ function UseReducer({name}){ //creamos el nombre P1
             <p>Confirmation State ¿Are u segure to delete?</p>
             <button
             onClick={()=> {
-                dispatch({ type: 'DELETE' })
+                dispatch({ type: actionTypes.delete })
             //  onDelete();
             }}
             >Yes, deleted
             </button>
             <button
             onClick={()=> {
-                dispatch({ type: 'RESET' })
+                dispatch({ type: actionTypes.reset })
                 // onReset();
             }}
             >No, I regretted
@@ -134,7 +142,7 @@ function UseReducer({name}){ //creamos el nombre P1
                 <p>Borrado con éxito</p>
                 <button
             onClick={()=> {
-                dispatch({ type: 'RESET' })
+                dispatch({ type: actionTypes.reset})
                 // onReset();
             }}
             >Resetear, volver atrás
