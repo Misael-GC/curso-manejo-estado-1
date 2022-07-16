@@ -88,7 +88,6 @@ function UseReducer({ name }) {
         console.log("Haciendo la validación");
 
         if (state.value === SECURITY_CODE) {
-          //actualizador 3
           onConfirm();
         } else {
           onError();
